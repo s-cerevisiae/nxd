@@ -71,6 +71,8 @@ impl Offset {
 
 #[cfg(test)]
 mod tests {
+    use proptest::prelude::*;
+
     use super::*;
 
     #[test]
@@ -119,5 +121,45 @@ mod tests {
         assert!(Offset::from_str("-").is_err());
         assert_eq!("+1".parse(), Ok(rel(1)));
         assert_eq!("-1".parse(), Ok(rel(-1)));
+    }
+
+    prop_compose! {
+        fn offset_u()(o in "[0-9a-fA-F]{16}") -> String {
+            o
+        }
+    }
+
+    prop_compose! {
+        fn offset_i()(o in "[+-][0-9a-fA-F]{8}") -> String {
+            o
+        }
+    }
+
+    proptest! {
+        #[test]
+        fn test_offset_props_u(o in offset_u()) {
+            Offset::from_str(&o).unwrap();
+        }
+
+        #[test]
+        fn test_offset_props_i(o in offset_i()) {
+            Offset::from_str(&o).unwrap();
+        }
+
+        #[test]
+        fn test_recognize_props(
+            o in prop_oneof![offset_i(), offset_u()],
+            d in "[0-9a-fA-F]{2}*",
+            c in ".*",
+        ) {
+            assert_eq!(
+                recognize_line(&format!("{o}:{d}|{c}")),
+                DumpLine { offset: &o, data: &d, comment: &c },
+            );
+            assert_eq!(
+                recognize_line(&format!("|{c}")),
+                DumpLine { offset: "", data: "", comment: &c },
+            );
+        }
     }
 }

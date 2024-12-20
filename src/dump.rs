@@ -127,6 +127,8 @@ pub(crate) fn dump_impl<R: Read, W: Write>(
 mod tests {
     use std::io::Cursor;
 
+    use proptest::prelude::*;
+
     use crate::parse::for_parsed_data;
 
     use super::*;
@@ -184,5 +186,18 @@ mod tests {
             dump("abc", 2, 0, 3).unwrap(),
             "00000003: 6162 | ab\n00000005: 63   | c\n"
         );
+    }
+
+    proptest! {
+        #[test]
+        fn test_dump_alignment(b in any::<Vec<u8>>(), c in 1..640usize, g in any::<usize>(), o in any::<u64>()) {
+            let s = dump(b, c, g, o).unwrap();
+            let mut width = 0;
+            for l in s.lines() {
+                let (o_d, _) = l.split_once('|').unwrap();
+                assert!(width <= o_d.len());
+                width = o_d.len();
+            }
+        }
     }
 }
