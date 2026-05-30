@@ -5,7 +5,7 @@ use std::{
     process::Command,
 };
 
-use eyre::{bail, eyre, WrapErr};
+use eyre::{WrapErr, bail, eyre};
 
 use crate::{cli::EditArgs, dump::dump_impl, load::load_impl};
 

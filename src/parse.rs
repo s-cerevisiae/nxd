@@ -1,6 +1,6 @@
 use std::{num::ParseIntError, str::FromStr};
 
-use eyre::{bail, eyre, WrapErr};
+use eyre::{WrapErr, bail, eyre};
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct DumpLine<'src> {

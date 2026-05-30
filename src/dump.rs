@@ -4,7 +4,7 @@ use std::{
     num::NonZeroUsize,
 };
 
-use eyre::{bail, eyre, WrapErr};
+use eyre::{WrapErr, bail, eyre};
 
 use crate::cli::DumpArgs;
 

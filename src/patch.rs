@@ -3,11 +3,11 @@ use std::{
     io::{self, BufRead, BufWriter, Seek, Write},
 };
 
-use eyre::{ensure, eyre, WrapErr};
+use eyre::{WrapErr, ensure, eyre};
 
 use crate::{
     cli::PatchArgs,
-    parse::{for_parsed_data, recognize_line, DumpLine, Offset},
+    parse::{DumpLine, Offset, for_parsed_data, recognize_line},
 };
 
 pub fn patch(args: PatchArgs) -> eyre::Result<()> {

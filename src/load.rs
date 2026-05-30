@@ -3,7 +3,7 @@ use std::{
     io::{self, BufRead, BufReader, Write},
 };
 
-use eyre::{eyre, WrapErr};
+use eyre::{WrapErr, eyre};
 
 use crate::{
     cli::LoadArgs,
