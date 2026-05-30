@@ -19,9 +19,8 @@ fn main() -> ExitCode {
     };
 
     if let Err(e) = result {
-        if !e
-            .downcast_ref::<io::Error>()
-            .map_or(false, |e| e.kind() == io::ErrorKind::BrokenPipe)
+        if e.downcast_ref::<io::Error>()
+            .is_none_or(|e| e.kind() != io::ErrorKind::BrokenPipe)
         {
             eprintln!("error: {e:?}");
         }
